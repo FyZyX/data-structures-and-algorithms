@@ -10,15 +10,16 @@ class Bucket:
         self._current = -1
 
     def insert(self, item: Item):
-        pass
+        self._items.append(item)
 
     def next(self):
-        pass
+        self._current += 1
+        return self._items[self._current]
 
 
 class HashMap:
     def __init__(self):
-        self.buckets = []
+        self.buckets = [Bucket()]
         self._count = 0
 
     def insert(self, item: Item):
@@ -27,7 +28,8 @@ class HashMap:
         if self._count > len(self.buckets):
             self._resize()
 
-        # TODO: Add new item to buckets
+        bucket = self.buckets[hash(item.key) % len(self.buckets)]
+        bucket.insert(item)
 
     def delete(self, key):
         pass
