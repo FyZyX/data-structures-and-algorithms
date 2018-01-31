@@ -5,7 +5,15 @@ class Item:
 
 
 class Bucket:
-    pass
+    def __init__(self):
+        self._items: [Item] = []
+        self._current = -1
+
+    def insert(self, item: Item):
+        pass
+
+    def next(self):
+        pass
 
 
 class HashMap:
