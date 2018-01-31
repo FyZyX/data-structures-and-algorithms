@@ -8,18 +8,35 @@ class TestHashMap(unittest.TestCase):
         self.item = Item('key', 'value')
 
     def test_resize(self):
-        self.hash_map.insert(self.item)
         self.assertEqual(len(self.hash_map.buckets), 1)
-
-        self.hash_map.insert(Item('new_key', 'new_value'))
+        self.hash_map._resize()
         self.assertEqual(len(self.hash_map.buckets), 2)
+        self.hash_map._resize()
+        self.assertEqual(len(self.hash_map.buckets), 4)
 
     def test_insert(self):
         self.hash_map.insert(self.item)
 
-        self.assertEqual(self.hash_map._count, 1)
+        self.assertEqual(len(self.hash_map), 1)
         self.assertEqual(len(self.hash_map.buckets), 1)
-        self.assertEqual(self.hash_map.buckets[0].next(), self.item)
+        self.assertIn(self.item, self.hash_map)
+
+        new_item_1 = Item('new key', 'new value')
+        self.hash_map.insert(new_item_1)
+
+        self.assertEqual(len(self.hash_map), 2)
+        self.assertEqual(len(self.hash_map.buckets), 2)
+        self.assertIn(self.item, self.hash_map)
+        self.assertIn(new_item_1, self.hash_map)
+
+        new_item_2 = Item('newer key', 'newer value')
+        self.hash_map.insert(new_item_2)
+
+        self.assertEqual(len(self.hash_map), 3)
+        self.assertEqual(len(self.hash_map.buckets), 4)
+        self.assertIn(self.item, self.hash_map)
+        self.assertIn(new_item_1, self.hash_map)
+        self.assertIn(new_item_2, self.hash_map)
 
 
 if __name__ == '__main__':

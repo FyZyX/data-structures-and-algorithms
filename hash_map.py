@@ -3,29 +3,33 @@ class Item:
         self.key = key
         self.value = value
 
+    def __repr__(self):
+        return f"<{repr(self.key)}: {repr(self.value)}>"
+
 
 class Bucket:
     def __init__(self):
         self._items: [Item] = []
-        self._current = -1
 
     def insert(self, item: Item):
         self._items.append(item)
 
-    def next(self):
-        self._current += 1
-        return self._items[self._current]
+    def __len__(self):
+        return len(self._items)
+
+    def __iter__(self):
+        return (item for item in self._items)
+
+    def __repr__(self):
+        return repr(self._items)
 
 
 class HashMap:
     def __init__(self):
         self.buckets = [Bucket()]
-        self._count = 0
 
     def insert(self, item: Item):
-        self._count += 1
-
-        if self._count > len(self.buckets):
+        if len(self) + 1 > len(self.buckets):
             self._resize()
 
         bucket = self.buckets[hash(item.key) % len(self.buckets)]
@@ -47,3 +51,9 @@ class HashMap:
 
         # Insert each item in a new bucket
         [self.insert(item) for bucket in old_buckets for item in bucket]
+
+    def __len__(self):
+        return sum(map(lambda bucket: len(bucket), self.buckets))
+
+    def __iter__(self):
+        return (item for bucket in self.buckets for item in bucket)
